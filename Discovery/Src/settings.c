@@ -66,7 +66,13 @@ uint8_t RTEactualLow = 0;
 ///
 //  ===============================================================================
 
-const SFirmwareData firmware_FirmwareData __attribute__( (section(".firmware_firmware_data")) ) =
+#ifdef HOST_PACKER
+#define FIRMWARE_DATA_ATTRIBUTE
+#else
+#define FIRMWARE_DATA_ATTRIBUTE __attribute__( (section(".firmware_firmware_data")) )
+#endif
+
+const SFirmwareData firmware_FirmwareData FIRMWARE_DATA_ATTRIBUTE =
 {
     .versionFirst   = 1,
     .versionSecond 	= 7,

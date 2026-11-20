@@ -99,14 +99,14 @@ jobs:
         make NO_DATE=1 firmware
 
     - name: PR artifacts
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && hashFiles('NON_DIVE_TEST_PROTOTYPE') == ''
       uses: actions/upload-artifact@v7.0.2
       with:
         name: OSTC4_update-${{ steps.generate_version.outputs.name }}
         path: Release/OSTC4update_*.bin
 
     - name: Push release
-      if: github.event_name == 'push'
+      if: github.event_name == 'push' && hashFiles('NON_DIVE_TEST_PROTOTYPE') == ''
       env:
         GH_TOKEN: ${{ github.token }}
         RELEASE_TAG: ${{ steps.generate_version.outputs.name }}

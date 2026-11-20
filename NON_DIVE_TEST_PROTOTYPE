@@ -1,0 +1,7 @@
+NON-DIVE TEST PROTOTYPE / 非潜水测试用途
+
+This source tree contains an experimental Simplified Chinese display prototype.
+Standard pull-request artifacts and GitHub releases are suppressed while this
+marker exists. Use .github/workflows/chinese-prototype.yml to produce explicitly
+labelled NON-DIVE TEST artifacts. Remove this marker only after the prototype
+has completed hardware, upgrade/rollback, and safety validation.

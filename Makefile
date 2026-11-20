@@ -111,6 +111,8 @@ test:
 		"$(BUILD_DIR)/Discovery/Src/utf8.c" "$(BUILD_DIR)/scripts/test_utf8.c" \
 		-o "$(BUILD_TOOLS_DIR)/tests/test_utf8"
 	"$(BUILD_TOOLS_DIR)/tests/test_utf8"
+	python3 "$(BUILD_DIR)/scripts/check_chinese_glyphs.py"
+	python3 "$(BUILD_DIR)/scripts/test_verify_update_package.py"
 
 include arm_build_tools.mk
 

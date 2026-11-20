@@ -1,0 +1,76 @@
+name: Build Simplified Chinese non-dive prototype
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+    - feature/simplified-chinese
+  workflow_dispatch:
+
+env:
+  BUILD_TOOLS_DIR: ${{ github.workspace }}/tools
+
+jobs:
+  prototype:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v7.0.1
+      with:
+        persist-credentials: false
+
+    - name: Run host-side validation tests
+      run: |
+        make test
+
+    - name: Get ARM toolchain version
+      id: toolchain
+      run: |
+        echo "version=$(make arm_tools_version)" >> "$GITHUB_OUTPUT"
+
+    - name: Cache ARM toolchain
+      uses: actions/cache@v6.1.0
+      with:
+        path: ${{ env.BUILD_TOOLS_DIR }}/gcc-arm-none-eabi-9-2020-q2-update
+        key: chinese-prototype-arm-toolchain-${{ steps.toolchain.outputs.version }}
+
+    - name: Install ARM toolchain if not cached
+      run: |
+        make arm_tools_install
+
+    - name: Build firmware-only update and all component binaries
+      run: |
+        make NO_DATE=1 firmware
+        make bootloader_binary rte_binary fontpack_binary
+
+    - name: Validate and label the non-dive prototype
+      id: package
+      env:
+        SOURCE_COMMIT: ${{ github.sha }}
+        SOURCE_BRANCH: ${{ github.ref_name }}
+      run: |
+        VERSION=$(make print_version)
+        PACKAGE="Release/OSTC4update_firmware_${VERSION}.bin"
+        test -f "$PACKAGE"
+        python3 scripts/verify_update_package.py "$PACKAGE" \
+          --type firmware \
+          --firmware-bin RefPrj/Firmware/Release/OSTC4_Firmware.bin \
+          --require-all-raw
+        python3 scripts/package_chinese_prototype.py \
+          --input "$PACKAGE" \
+          --firmware-bin RefPrj/Firmware/Release/OSTC4_Firmware.bin \
+          --version "$VERSION" \
+          --commit "$SOURCE_COMMIT" \
+          --branch "$SOURCE_BRANCH" \
+          --output-root dist
+        echo "prototype_name=OSTC4-zh-CN-NON-DIVE-TEST-${VERSION}-${SOURCE_COMMIT:0:7}" >> "$GITHUB_OUTPUT"
+
+    - name: Upload non-dive prototype artifact
+      uses: actions/upload-artifact@v7.0.2
+      with:
+        name: ${{ steps.package.outputs.prototype_name }}
+        path: dist/
+        if-no-files-found: error
+        retention-days: 30
