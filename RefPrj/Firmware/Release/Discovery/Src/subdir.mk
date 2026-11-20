@@ -70,6 +70,7 @@ $(BUILD_DIR)/Discovery/Src/tMenuSystem.c \
 $(BUILD_DIR)/Discovery/Src/tMenuXtra.c \
 $(BUILD_DIR)/Discovery/Src/test_vpm.c \
 $(BUILD_DIR)/Discovery/Src/text_multilanguage.c \
+$(BUILD_DIR)/Discovery/Src/utf8.c \
 $(BUILD_DIR)/Discovery/Src/timer.c \
 $(BUILD_DIR)/Discovery/Src/unit.c \
 $(BUILD_DIR)/Discovery/Src/vpm.c \
@@ -146,6 +147,7 @@ OBJS += \
 ./Discovery/Src/tMenuXtra.o \
 ./Discovery/Src/test_vpm.o \
 ./Discovery/Src/text_multilanguage.o \
+./Discovery/Src/utf8.o \
 ./Discovery/Src/timer.o \
 ./Discovery/Src/unit.o \
 ./Discovery/Src/vpm.o \
@@ -221,6 +223,7 @@ C_DEPS += \
 ./Discovery/Src/tMenuXtra.d \
 ./Discovery/Src/test_vpm.d \
 ./Discovery/Src/text_multilanguage.d \
+./Discovery/Src/utf8.d \
 ./Discovery/Src/timer.d \
 ./Discovery/Src/unit.d \
 ./Discovery/Src/vpm.d \
@@ -744,6 +747,9 @@ Discovery/Src/text_multilanguage.o: $(BUILD_DIR)/Discovery/Src/text_multilanguag
 	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -DSTM32 -DSTM32F4 -DSTM32F429xx -DSTM32F429IITx -I"$(BUILD_DIR)/Discovery/Inc" -I"$(BUILD_DIR)/Common/Drivers/CMSIS/Include" -I"$(BUILD_DIR)/Common/Drivers/STM32F4xx/Include" -I"$(BUILD_DIR)/Common/Drivers/STM32F4xx_HAL_Driver/Inc" -I"$(BUILD_DIR)/Common/Inc" -O2 -Wall -ffunction-sections -fmessage-length=0 -c -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
+
+Discovery/Src/utf8.o: $(BUILD_DIR)/Discovery/Src/utf8.c
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -DSTM32 -DSTM32F4 -DSTM32F429xx -DSTM32F429IITx -I"$(BUILD_DIR)/Discovery/Inc" -I"$(BUILD_DIR)/Common/Drivers/CMSIS/Include" -I"$(BUILD_DIR)/Common/Drivers/STM32F4xx/Include" -I"$(BUILD_DIR)/Common/Drivers/STM32F4xx_HAL_Driver/Inc" -I"$(BUILD_DIR)/Common/Inc" -O2 -Wall -ffunction-sections -fmessage-length=0 -c -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@" "$<"
 
 Discovery/Src/timer.o: $(BUILD_DIR)/Discovery/Src/timer.c
 	@echo 'Building file: $<'

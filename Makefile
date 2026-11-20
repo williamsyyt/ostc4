@@ -106,7 +106,11 @@ distclean:: clean packer_clean
 	$(RM) -f Release/OSTC4update_*.bin
 
 test:
-	@echo "No tests defined"
+	@mkdir -p "$(BUILD_TOOLS_DIR)/tests"
+	$(CC) -std=c99 -Wall -Wextra -Werror -I"$(BUILD_DIR)/Discovery/Inc" \
+		"$(BUILD_DIR)/Discovery/Src/utf8.c" "$(BUILD_DIR)/scripts/test_utf8.c" \
+		-o "$(BUILD_TOOLS_DIR)/tests/test_utf8"
+	"$(BUILD_TOOLS_DIR)/tests/test_utf8"
 
 include arm_build_tools.mk
 

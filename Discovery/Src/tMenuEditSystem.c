@@ -95,6 +95,7 @@ uint8_t OnAction_German				(uint32_t editId, uint8_t blockNumber, uint8_t digitN
 uint8_t OnAction_French				(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
 uint8_t OnAction_Italian			(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
 uint8_t OnAction_Espanol			(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
+uint8_t OnAction_ChineseSimplified	(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
 //uint8_t OnAction_Design_t7		(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
 //uint8_t OnAction_Design_t7ft	(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
 //uint8_t OnAction_Design_t3		(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action);
@@ -861,6 +862,13 @@ void openEdit_Language(void)
         active = 0;
     write_field_on_off(StMSYS2_Espanol,			 30, 800, ME_Y_LINE5,  &FontT48, text, active);
 
+    pSettings->selected_language = LANGUAGE_ChineseSimplified;
+    if(	actualLanguage == pSettings->selected_language)
+        active = 1;
+    else
+        active = 0;
+    write_field_on_off(StMSYS2_ChineseSimplified,	 30, 800, ME_Y_LINE6,  &FontT48, text, active);
+
     pSettings->selected_language = actualLanguage;
 
     write_buttonTextline(TXT2BYTE_ButtonBack,TXT2BYTE_ButtonEnter,TXT2BYTE_ButtonNext);
@@ -870,6 +878,7 @@ void openEdit_Language(void)
     setEvent(StMSYS2_French,	(uint32_t)OnAction_French);
     setEvent(StMSYS2_Italian,	(uint32_t)OnAction_Italian);
     setEvent(StMSYS2_Espanol,	(uint32_t)OnAction_Espanol);
+    setEvent(StMSYS2_ChineseSimplified,	(uint32_t)OnAction_ChineseSimplified);
 }
 
 
@@ -909,6 +918,14 @@ uint8_t OnAction_Espanol			(uint32_t editId, uint8_t blockNumber, uint8_t digitN
 {
     SSettings *pSettings = settingsGetPointer();
     pSettings->selected_language = LANGUAGE_Espanol;
+    return EXIT_TO_MENU_WITH_LOGO;
+}
+
+
+uint8_t OnAction_ChineseSimplified	(uint32_t editId, uint8_t blockNumber, uint8_t digitNumber, uint8_t digitContent, uint8_t action)
+{
+    SSettings *pSettings = settingsGetPointer();
+    pSettings->selected_language = LANGUAGE_ChineseSimplified;
     return EXIT_TO_MENU_WITH_LOGO;
 }
 

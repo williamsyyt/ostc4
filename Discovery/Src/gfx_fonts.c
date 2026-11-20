@@ -22,6 +22,7 @@
 #include "Fonts/font_T54_extra.h"
 #include "Fonts/font_T84_extra.h"
 #include "Fonts/font_T105_extra.h"
+#include "Fonts/font_T48_chinese.h"
 
 #ifdef DEBUG
 # 	define INCLUDE_FONTS_BINARY

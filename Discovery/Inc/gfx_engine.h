@@ -217,7 +217,7 @@ void GFX_use_colorscheme(uint8_t colorscheme);
 
 void GFX_screenshot(void);
 
-tFont* GFX_Check_Extra_Font(uint8_t character, tFont *Font);
-uint32_t GFX_Character_Width(uint8_t character, tFont *Font);
+tFont* GFX_Check_Extra_Font(uint32_t character, tFont *Font);
+uint32_t GFX_Character_Width(uint32_t character, tFont *Font);
 void Gfx_colorsscheme_mod(char *text, uint8_t alternativeColor);
 #endif // GFX_ENGINE_H

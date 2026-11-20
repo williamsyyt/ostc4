@@ -31,6 +31,7 @@
 #include "ostc.h"
 #include "settings.h"
 #include "text_multilanguage.h"
+#include "utf8.h"
 
 /* Exported variables --------------------------------------------------------*/
 
@@ -173,7 +174,7 @@ uint32_t MaxU32GFX(uint32_t a, uint32_t b)
 
 /* Private function prototypes -----------------------------------------------*/
 
-static uint32_t GFX_write_char(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint8_t character, tFont *Font);
+static uint32_t GFX_write_char(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint32_t character, tFont *Font);
 static uint32_t GFX_write_substring(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* hgfx, uint8_t textId, int8_t nextCharFor2Byte);
 static uint32_t GFX_write__Modify_Xdelta__Centered(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* hgfx, const char *pText);
 static uint32_t GFX_write__Modify_Xdelta__RightAlign(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* hgfx, const char *pTextInput);
@@ -2851,7 +2852,8 @@ static uint32_t GFX_write_substring(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* 
 	uint8_t i, j;
 	uint32_t found;
 	uint32_t pText;
-	uint16_t decodeUTF8;
+	uint32_t decodeUTF8;
+	uint8_t utf8Length;
 	uint16_t endIndex = 0;
 	uint16_t startIndex = 0;
 #ifndef BOOTLOADER_STANDALONE
@@ -2946,18 +2948,11 @@ static uint32_t GFX_write_substring(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* 
 			cfg->Xdelta += ((tFont *)cfg->actualFont)->spacesize;
 		}
 		else
-		if((*(char*)pText) & 0x80) /* Identify a UNICODE character other than standard ASCII using the highest bit */
 		{
-			decodeUTF8 = ((*(char*)pText) & 0x1F) << 6; /* use 5bits of first byte for upper part of unicode */
-			pText++;
-			decodeUTF8 |= (*(char*)pText) & 0x3F; /* add lower 6bits as second part of the unicode */
-			if (decodeUTF8 <= 0xff) /* The following function has a uint8 input parameter ==> no UNICODEs > 0xff supported */
-			{
-				cfg->Xdelta = GFX_write_char(hgfx, cfg, (uint8_t)decodeUTF8, (tFont *)cfg->actualFont);
-			}
+			utf8Length = utf8_decode((const char *)pText, &decodeUTF8);
+			cfg->Xdelta = GFX_write_char(hgfx, cfg, decodeUTF8, (tFont *)cfg->actualFont);
+			pText += utf8Length - 1;
 		}
-		else
-			cfg->Xdelta = GFX_write_char(hgfx, cfg, *(uint8_t *)pText, (tFont *)cfg->actualFont);
 
     pText++;
 	}
@@ -2984,7 +2979,7 @@ static uint32_t GFX_write_substring(GFX_CfgWriteString* cfg, GFX_DrawCfgWindow* 
 	* @retval Ydelta:			0x0000FFFF if not successful or char_truncated
   */
 
-static uint32_t GFX_write_char_doubleSize(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint8_t character, tFont *Font)
+static uint32_t GFX_write_char_doubleSize(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint32_t character, tFont *Font)
 {
 	uint32_t i, j;
 	uint32_t width, height;
@@ -3366,7 +3361,7 @@ static uint32_t GFX_write_char_doubleSize(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteS
 	* @retval Ydelta:			0x0000FFFF if not successful or char_truncated
   */
 
-static uint32_t GFX_write_char(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint8_t character, tFont *Font)
+static uint32_t GFX_write_char(GFX_DrawCfgWindow* hgfx, GFX_CfgWriteString* cfg, uint32_t character, tFont *Font)
 {
 
 #ifndef BOOTLOADER_STANDALONE
@@ -3814,7 +3809,8 @@ static uint32_t GFX_write__Modify_Xdelta__Centered(GFX_CfgWriteString* cfg, GFX_
 	uint32_t Xsum;
 	uint32_t j;
 	uint32_t pText;
-	uint16_t decodeUTF8;
+	uint32_t decodeUTF8;
+	uint8_t utf8Length;
 	uint8_t tinyState = 0;		/* used to identify the usage of tiny font */
 	tFont* ptargetFont;
 
@@ -3865,17 +3861,9 @@ static uint32_t GFX_write__Modify_Xdelta__Centered(GFX_CfgWriteString* cfg, GFX_
 		}
 		else
 		{
-			if((*(char*)pText) & 0x80) /* Identify a UNICODE character other than standard ASCII using the highest bit */
-			{
-				decodeUTF8 = ((*(char*)pText) & 0x1F) << 6; /* use 5bits of first byte for upper part of unicode */
-				pText++;
-				decodeUTF8 |= (*(char*)pText) & 0x3F; /* add lower 6bits as second part of the unicode */
-			}
-			else
-			{
-				decodeUTF8 = *(char*)pText; /* place ASCII char */
-			}
+			utf8Length = utf8_decode((const char *)pText, &decodeUTF8);
 			Xsum += GFX_Character_Width(decodeUTF8, ptargetFont);
+			pText += utf8Length - 1;
 		}
 
 		pText++;
@@ -3911,7 +3899,8 @@ static uint32_t GFX_write__Modify_Xdelta__RightAlign(GFX_CfgWriteString* cfg, GF
 	tFont *font;
 	char cText[101];
 	uint32_t pText;
-	uint16_t decodeUTF8;
+	uint32_t decodeUTF8;
+	uint8_t utf8Length;
 	uint8_t tinyState = 0;		/* used to identify the usage of tiny font */
 
 #ifndef BOOTLOADER_STANDALONE
@@ -3974,17 +3963,9 @@ static uint32_t GFX_write__Modify_Xdelta__RightAlign(GFX_CfgWriteString* cfg, GF
 		}
 		else
 		{
-			if((*(char*)pText) & 0x80) /* Identify a UNICODE character other than standard ASCII using the highest bit */
-			{
-				decodeUTF8 = ((*(char*)pText) & 0x1F) << 6; /* use 5bits of first byte for upper part of unicode */
-				pText++;
-				decodeUTF8 |= (*(char*)pText) & 0x3F; /* add lower 6bits as second part of the unicode */
-			}
-			else
-			{
-				decodeUTF8 = *(char*)pText;
-			}
+			utf8Length = utf8_decode((const char *)pText, &decodeUTF8);
 			Xsum += GFX_Character_Width(decodeUTF8, font);  /* lookup character and add width */
+			pText += utf8Length - 1;
 		}
 		pText++;
 		j++;
@@ -4686,7 +4667,7 @@ void GFX_screenshot(void)
 }
 
 #ifndef BOOTLOADER_STANDALONE
-tFont* GFX_Check_Extra_Font(uint8_t character, tFont *Font)
+tFont* GFX_Check_Extra_Font(uint32_t character, tFont *Font)
 {
 	uint32_t i;
 	uint32_t found;
@@ -4712,11 +4693,15 @@ tFont* GFX_Check_Extra_Font(uint8_t character, tFont *Font)
 	{
 		Font = (tFont *)&FontT105Extra;
 	}
+	else if (!found && Font == &FontT48)
+	{
+		Font = (tFont *)&FontT48Chinese;
+	}
 
 	return Font;
 }
 #endif
-uint32_t GFX_Character_Width(uint8_t character, tFont *Font)
+uint32_t GFX_Character_Width(uint32_t character, tFont *Font)
 {
 	uint32_t i;
 #ifndef BOOTLOADER_STANDALONE
@@ -4747,6 +4732,11 @@ uint32_t GFX_Character_Width(uint8_t character, tFont *Font)
 	{
 		found = 1;
 		Font = (tFont *)&FontT105Extra;
+	}
+	else if (Font == &FontT48)
+	{
+		found = 1;
+		Font = (tFont *)&FontT48Chinese;
 	}
 
 	if (found)

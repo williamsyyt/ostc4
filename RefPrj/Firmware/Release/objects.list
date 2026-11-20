@@ -151,6 +151,7 @@
 "Discovery/Src/tMenuXtra.o"
 "Discovery/Src/test_vpm.o"
 "Discovery/Src/text_multilanguage.o"
+"Discovery/Src/utf8.o"
 "Discovery/Src/timer.o"
 "Discovery/Src/unit.o"
 "Discovery/Src/vpm.o"

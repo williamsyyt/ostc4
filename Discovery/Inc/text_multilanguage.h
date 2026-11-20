@@ -40,6 +40,7 @@ enum LANGUAGES
 		LANGUAGE_French,
 		LANGUAGE_Italian,
 		LANGUAGE_Espanol,
+		LANGUAGE_ChineseSimplified,
 		LANGUAGE_END
 };
 #define NUMBER_OF_LANGUAGES LANGUAGE_END

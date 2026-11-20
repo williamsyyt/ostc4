@@ -1736,7 +1736,7 @@ uint8_t check_and_correct_settings(uint8_t whichSettings)
         if(pSettings->selected_language > 1)
             pSettings->selected_language = 0;
 #else
-        if(pSettings->selected_language > 4)
+        if(pSettings->selected_language >= LANGUAGE_END)
             pSettings->selected_language = 0;
 #endif
 
@@ -2510,7 +2510,7 @@ uint8_t writeData(uint8_t * data)
                 GFX_use_colorscheme(Settings.tX_colorscheme);
         break;
         case 0x32:
-        if(!checkValue(data[1],0,4))
+        if(!checkValue(data[1],0,LANGUAGE_END - 1))
             return ERROR_;
         Settings.selected_language = data[1];
         break;
@@ -2878,7 +2878,7 @@ uint8_t readDataLimits__8and16BitValues_4and7BytesOutput(uint8_t what, uint8_t *
         data[datacounter++] = PARAM_ENUM;
         data[datacounter++] = 0;
         data[datacounter++] = settingsGetPointerStandard()->selected_language;
-        data[datacounter++] = 1;
+        data[datacounter++] = LANGUAGE_END - 1;
         break;
 
     case 0x33:

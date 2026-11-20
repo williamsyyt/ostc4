@@ -3156,7 +3156,7 @@ void GFX_screenshot(void)
 */	
 }
 
-uint32_t GFX_Character_Width(uint8_t character, tFont *Font)
+uint32_t GFX_Character_Width(uint32_t character, tFont *Font)
 {
 	uint32_t i;
 	for(i=0;i<Font->length;i++)

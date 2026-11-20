@@ -69,6 +69,7 @@ extern const tFont FontT84Spaced;
 extern const tFont FontT54Extra;
 extern const tFont FontT84Extra;
 extern const tFont FontT105Extra;
+extern const tFont FontT48Chinese;
 extern const tFont Batt24;
 
 extern const tImage ImgHWcolor;

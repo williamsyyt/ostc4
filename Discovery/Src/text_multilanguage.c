@@ -53,6 +53,7 @@ static uint8_t text_DE_Language[] = "Sprache";
 static uint8_t text_FR_Language[] = "Langue";
 static uint8_t text_IT_Language[] = "Lingua";
 static uint8_t text_ES_Language[] = "Idioma";
+static uint8_t text_ZH_Language[] = "语言";
 
 // Menu
 static uint8_t text_EN_LanguageName[] = "English";
@@ -60,6 +61,7 @@ static uint8_t text_DE_LanguageName[] = "Deutsch";
 static uint8_t text_FR_LanguageName[] = "Français";
 static uint8_t text_IT_LanguageName[] = "Italiano";
 static uint8_t text_ES_LanguageName[] = "Spanish";  
+static uint8_t text_ZH_LanguageName[] = "简体中文";
 
 // dive mode
 static uint8_t text_EN_Depth[] = "Depth";
@@ -2181,8 +2183,8 @@ static uint8_t text_ES_Save[] = "";
 
 const tText text_array[] =
 {
-    {(uint8_t)TXT_Language,         {text_EN_Language, text_DE_Language, text_FR_Language, text_IT_Language, text_ES_Language}},
-    {(uint8_t)TXT_LanguageName, 	{text_EN_LanguageName, text_DE_LanguageName, text_FR_LanguageName, text_IT_LanguageName, text_ES_LanguageName}},
+    {(uint8_t)TXT_Language,         {text_EN_Language, text_DE_Language, text_FR_Language, text_IT_Language, text_ES_Language, text_ZH_Language}},
+    {(uint8_t)TXT_LanguageName, 	{text_EN_LanguageName, text_DE_LanguageName, text_FR_LanguageName, text_IT_LanguageName, text_ES_LanguageName, text_ZH_LanguageName}},
     {(uint8_t)TXT_Depth,            {text_EN_Depth, text_DE_Depth, text_FR_Depth, text_IT_Depth, text_ES_Depth}},
     {(uint8_t)TXT_Divetime,         {text_EN_Divetime, text_DE_Divetime, text_FR_Divetime, text_IT_Divetime, text_ES_Divetime}},
     {(uint8_t)TXT_MaxDepth,         {text_EN_MaxDepth, text_DE_MaxDepth, text_FR_MaxDepth, text_IT_MaxDepth, text_ES_MaxDepth}},
