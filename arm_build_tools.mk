@@ -40,7 +40,7 @@ export PATH := $(abspath $(TOOLCHAIN_DIR)/bin):$(PATH)
 arm_tools_install: $(TOOLCHAIN_DIR)
 
 $(TOOLCHAIN_DIR):
-	$(MAKE) arm_tools_uninstall
+	$(RM) -rf "$(TOOLCHAIN_DIR)"
 	@set -eu; \
 	mkdir -p "$(BUILD_TOOLS_DIR)/dist"; \
 	if [ ! -d "$(TOOLCHAIN_DIR)" ]; then \

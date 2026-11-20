@@ -30,7 +30,7 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables
 
 # Tool invocations
-OSTC4_BootLoader.elf: $(OBJS) $(USER_OBJS) $(BUILD_DIR)//../ostc4/BootLoader/CPU1-F429_boot.ld
+OSTC4_BootLoader.elf: $(OBJS) $(USER_OBJS) $(BUILD_DIR)/BootLoader/CPU1-F429_boot.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
 	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -nodefaultlibs -u _printf_float -T"$(BUILD_DIR)/BootLoader/CPU1-F429_boot.ld" -Wl,-Map=output.map -Wl,--gc-sections -Wl,--no-check-sections -o "OSTC4_BootLoader.elf" @"objects.list" $(USER_OBJS) $(LIBS)

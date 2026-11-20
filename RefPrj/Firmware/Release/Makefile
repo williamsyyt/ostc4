@@ -31,7 +31,7 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables
 
 # Tool invocations
-OSTC4_Firmware.elf: $(OBJS) $(USER_OBJS) $(BUILD_DIR)//../ostc4/Common/CPU1-F429.ld
+OSTC4_Firmware.elf: $(OBJS) $(USER_OBJS) $(BUILD_DIR)/Common/CPU1-F429.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
 	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -nodefaultlibs -L"$(BUILD_DIR)/RefPrj/FontPack/Library" -u _printf_float -T"$(BUILD_DIR)/Common/CPU1-F429.ld" -Wl,-Map=output.map -Wl,--gc-sections -Wl,--no-check-sections -o "OSTC4_Firmware.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lOSTC4_FontPack
